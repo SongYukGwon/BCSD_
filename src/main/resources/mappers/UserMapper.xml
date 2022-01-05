@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="repository.UserMapper">
+    <select id="login" resultType="domain.UserDTO">
+        <!-- db 구조 -->
+        select * from user where account = #{account}
+    </select>
+    <insert id="signUp">
+        INSERT INTO user (account, password, name, email) VALUES (#{account}, #{password},#{email}, #{name})
+    </insert>
+</mapper>
