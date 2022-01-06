@@ -5,5 +5,7 @@ import domain.UserDTO;
 
 public interface IUserService {
     boolean signUp(UserDTO user);
-    UserDTO login(UserDTO user);
+    boolean login(UserDTO user);
+    boolean logout();
+    boolean quit(String password);
 }

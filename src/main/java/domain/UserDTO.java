@@ -7,9 +7,19 @@ public class UserDTO {
     private String password;
     private String name;
     private String email;
+    private long id;
     private Timestamp created_at;
     private Timestamp updated_at;
-    private Timestamp deleted_at;
+    private int is_deleted;
+
+    public String toString(){
+        String tmp = "account : " + account + "\nname : " + name;
+        return tmp;
+    }
+
+    public long getId(){return id;}
+
+    public void setId(long id){this.id = id;}
 
     public String getEmail() {
         return email;
@@ -51,7 +61,7 @@ public class UserDTO {
 
     public void setCreated_at(Timestamp created_at){this.created_at = created_at;}
 
-    public Timestamp getDeleted_at(){return deleted_at;}
+    public int getDeleted_at(){return is_deleted;}
 
-    public void setDeleted_at(Timestamp deleted_at){this.deleted_at = deleted_at;}
+    public void setDeleted_at(int is_deleted){this.is_deleted = is_deleted;}
 }

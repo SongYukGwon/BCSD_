@@ -11,7 +11,7 @@
     <title>Title</title>
 </head>
 <body>
-<form method = post>
+<form method ={RequestParam.POST}>
     <!-- 아이디 -->
     <div>
         <label for="account">아이디</label>
@@ -24,12 +24,12 @@
         <input type="password" class="form-control" id="password" name="password" placeholder="PASSWORD" required>
         <div class="check_font" id="pw_check"></div>
     </div>
-    <!-- 비밀번호 재확인 -->
-    <div>
-        <label for="password2">비밀번호 확인</label>
-        <input type="password" class="form-control" id="password2" name="password2" placeholder="Confirm Password" required>
-        <div class="check_font" id="pw2_check"></div>
-    </div>
+<%--    <!-- 비밀번호 재확인 -->--%>
+<%--    <div>--%>
+<%--        <label for="password2">비밀번호 확인</label>--%>
+<%--        <input type="password" class="form-control" id="password2" name="password2" placeholder="Confirm Password" required>--%>
+<%--        <div class="check_font" id="pw2_check"></div>--%>
+<%--    </div>--%>
     <!-- 이름 -->
     <div>
         <label for="name">이름</label>
@@ -38,8 +38,8 @@
     </div>
     <!-- 본인확인 이메일 -->
     <div>
-        <label for="user_email">이메일</label>
-        <input type="text" class="form-control" name="user_email" id="user_email" placeholder="E-mail" required>
+        <label for="email">이메일</label>
+        <input type="text" class="form-control" name="email" id="email" placeholder="E-mail" required>
         <div class="check_font" id="email_check"></div>
     </div>
     <div>

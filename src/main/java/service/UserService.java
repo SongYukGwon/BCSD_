@@ -3,8 +3,12 @@ package service;
 import domain.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import repository.UserMapper;
 import service.interfaces.IUserService;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Service
 public class UserService implements IUserService {
@@ -30,9 +34,50 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public UserDTO login(UserDTO user){
-        UserDTO fuser = userMapper.login(user);
-        return fuser;
+    public boolean login(UserDTO user){
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        Long CUserId = (Long)request.getSession().getAttribute("userId");
+        //로그인된 정보가 없다면 mapper에서 user정보 받아오기
+        if(CUserId == null) {
+            UserDTO fuser = userMapper.login(user);
+            //받아온 유저정보가 유효한지 확인
+            if(fuser != null&&fuser.getDeleted_at()==0&& fuser.getPassword().equals(user.getPassword())) {
+                //정보가 유효하면 로그인정보 세션에 저장
+                request.getSession().setAttribute("userId", fuser.getId());
+                return true;
+            }
+        }
+        //로그인된 정보가 있으면 오류
+        return false;
+    }
+
+    @Override
+    public boolean logout(){
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        Long CUserId = (Long)request.getSession().getAttribute("userId");
+
+        //유저 정보가 없는데 로그아웃실행이면 에러
+        if(CUserId == null)
+            return false;
+        else{
+            //로그인 정보 삭제
+            request.getSession().removeAttribute("userId");
+            return true;
+        }
+    }
+
+    @Override
+    public boolean quit(String password){
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        Long CUserId = (Long)request.getSession().getAttribute("userId");
+
+        UserDTO fuser = userMapper.findWithUserId(CUserId);
+        if(fuser!=null && fuser.getPassword().equals(password)){
+            userMapper.quit(fuser);
+            request.getSession().removeAttribute("userId");
+            return true;
+        }
+        return false;
     }
 }
 
