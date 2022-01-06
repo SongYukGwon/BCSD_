@@ -5,6 +5,8 @@
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
           <element id="module-output" name="BCSD_Beginner_SpringOverview" />
+          <element id="module-output" name="BCSD_BP" />
+          <element id="module-output" name="HelloSpring" />
         </element>
         <element id="directory" name="lib">
           <element id="library" level="project" name="Maven: org.springframework:spring-context:3.2.18.RELEASE" />
@@ -46,6 +48,8 @@
         </element>
       </element>
       <element id="javaee-facet-resources" facet="BCSD_Beginner_SpringOverview/web/Web" />
+      <element id="javaee-facet-resources" facet="BCSD_BP/web/Web" />
+      <element id="javaee-facet-resources" facet="HelloSpring/web/Web" />
     </root>
   </artifact>
 </component>
