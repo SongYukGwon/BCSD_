@@ -6,8 +6,13 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="HelloSpring" />
         <module name="BCSD_Beginner_SpringOverview" />
+        <module name="BCSD_BP" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="BCSD_Beginner_SpringOverview" target="8" />
+    </bytecodeTargetLevel>
   </component>
 </project>

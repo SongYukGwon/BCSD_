@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="repository.BoardMapper">
+    <select id="readBoard" resultType="domain.BoardDTO">
+        SELECT * FROM board WHERE id = #{boardId}
+    </select>
+    <select id="findwithTitle" resultType="domain.BoardDTO">
+        SELECT * FROM board WHERE title = #{title}
+    </select>
+    <insert id="makeBoard">
+        INSERT INTO user (title, user_id, content, category_id) VALUES (#{account}, #{password},#{email}, #{name})
+    </insert>
+    <update id="deleteboard">
+        UPDATE board
+        SET is_deleted=1
+        WHERE id = #{boardId}
+    </update>
+
+</mapper>
