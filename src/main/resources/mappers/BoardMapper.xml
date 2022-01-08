@@ -1,18 +1,26 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="repository.BoardMapper">
+    <select id="boardList" resultType="domain.BoardDTO">
+        SELECT * FROM board WHERE is_deleted = 0
+    </select>
     <select id="readBoard" resultType="domain.BoardDTO">
         SELECT * FROM board WHERE id = #{boardId}
     </select>
-    <select id="findwithTitle" resultType="domain.BoardDTO">
-        SELECT * FROM board WHERE title = #{title}
+    <select id="findBoard" resultType="domain.BoardDTO">
+        SELECT * FROM board WHERE (title LIKE CONCAT('%', #{title}, '%')) AND (is_deleted = 0)
     </select>
     <insert id="makeBoard">
-        INSERT INTO user (title, user_id, content, category_id) VALUES (#{account}, #{password},#{email}, #{name})
+        INSERT INTO board (title, user_id, content, category_id) VALUES (#{title}, #{user_Id},#{content}, #{category_id})
     </insert>
-    <update id="deleteboard">
+    <update id="deleteBoard">
         UPDATE board
         SET is_deleted=1
+        WHERE id = #{boardId}
+    </update>
+    <update id="addView">
+        UPDATE board
+        SET view = view+1
         WHERE id = #{boardId}
     </update>
 
