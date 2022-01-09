@@ -21,7 +21,7 @@ public class BoardDTO {
 
     public long getCategory_id(){return category_id;}
 
-    public void setCategory_id(long category_id){this.category_id = BoardDTO.this.category_id;}
+    public void setCategory_id(long category_id){this.category_id = category_id;}
 
     public int getPoint() {
         return point;

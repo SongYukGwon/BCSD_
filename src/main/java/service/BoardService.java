@@ -1,6 +1,5 @@
 package service;
 
-
 import domain.BoardDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Service
-public class BoardService implements IBoardService {
+public class BoardService implements IBoardService{
     @Autowired
     BoardMapper boardMapper;
 
@@ -71,17 +70,19 @@ public class BoardService implements IBoardService {
         //수정
         board.setTitle(UpBoard.getTitle());
         board.setContent(UpBoard.getContent());
+        board.setId(boardID);
 
         //수정한 내용 업데이트
-        boardMapper.updateBoard(UpBoard);
+        boardMapper.updateBoard(board);
         return true;
     }
 
     @Override
-    public boolean revisePoint(int point){
+    public boolean revisePoint(int point, Long boardId){
+        //계정당 한번만 누를 수 있도록 구현
 
-        //계정당 한번만 누를 수 있도록 해야함...
-        boardMapper.revisePoint(point);
+        //이상없으면 결과 반영
+        boardMapper.revisePoint(point, boardId);
         return true;
     }
 
@@ -112,7 +113,6 @@ public class BoardService implements IBoardService {
 
     public List<BoardDTO> boardList(){
         List<BoardDTO> boardList = boardMapper.boardList();
-
         return boardList;
     }
 }

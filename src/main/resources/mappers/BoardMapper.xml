@@ -23,5 +23,17 @@
         SET view = view+1
         WHERE id = #{boardId}
     </update>
+    <update id="updateBoard">
+        UPDATE board SET
+        title = #{title},
+        content = #{content},
+        updated_at = CURRENT_TIMESTAMP
+        WHERE id = #{id}
+    </update>
+    <update id="revisePoint">
+        UPDATE board
+        SET point = point + #{point}
+        WHERE id = #{boardId}
+    </update>
 
 </mapper>
