@@ -9,6 +9,7 @@ public interface IBoardService {
     boolean deleteBoard(long boardId) throws Exception;
     boolean updateBoard(BoardDTO board, long boardID) throws Exception;
     boolean revisePoint(int point, Long boardId);
+    boolean cancelPoint(Long boardId) throws Exception;
     List<BoardDTO> findBoard(String title);
     BoardDTO readBoard(long boardId) throws Exception;
     List<BoardDTO> boardList();

@@ -78,11 +78,18 @@ public class BoardController {
     @ApiOperation(value = "게시글 싫어요", notes = "게시글을 싫어요 합니다.")
     public ResponseEntity<String> downPointBoard(@PathVariable("boardId") Long boardId){
         if(boardService.revisePoint(-1, boardId))
-            return new ResponseEntity<>("Success up point", HttpStatus.OK);
+            return new ResponseEntity<>("Success down point", HttpStatus.OK);
         else
-            return new ResponseEntity<>("Fail up Point", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("Fail down Point", HttpStatus.INTERNAL_SERVER_ERROR);
     }
-    
 
+    @RequestMapping(value = {"/{boardId}/like/cancel","/{boardId}/unlike/cancel"}, method = RequestMethod.POST)
+    @ApiOperation(value = "좋/싫 취소", notes = "게시글을 좋/싫 취소합니다.")
+    public ResponseEntity<String> cancelPoint(@PathVariable("boardId") Long boardId) throws Exception {
+        if(boardService.cancelPoint(boardId))
+            return new ResponseEntity<>("Success cancel point", HttpStatus.OK);
+        else
+            return new ResponseEntity<>("Fail cancel Point", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 
 }

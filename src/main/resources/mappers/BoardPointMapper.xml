@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="repository.CommentMapper">
+    <select id="readUsePoint" resultType="domain.PointDTO">
+        SELECT * FROM point WHERE user_id = #{user_id} AND board_id = #{board_id};
+    </select>
+    <insert id="insertPointUsed">
+        INSERT INTO point (point, user_id, board_id) VALUES (#{point}, #{user_id}, #{board_id})
+    </insert>
+    <update id="cancelPoint">
+        UPDATE point
+        SET is_deleted = 1
+        WHERE user_id = #{user_id} AND board_id = #{board_id}
+    </update>
+    <update id="rePoint">
+        UPDATE point
+        SET is_deleted = 0,
+            point = #{point}
+        WHERE user_id = #{user_id} AND board_id = #{board_id}
+    </update>
+</mapper>
