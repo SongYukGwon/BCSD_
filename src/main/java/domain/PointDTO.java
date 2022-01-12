@@ -7,11 +7,6 @@ public class PointDTO {
     private long board_id;
     private int is_deleted;
 
-    public PointDTO(int point, long user_id, long board_id){
-        this.point = point;
-        this.user_id = user_id;
-        this.board_id = board_id;
-    }
 
     public int getPoint() {
         return point;

@@ -89,24 +89,31 @@ public class BoardService implements IBoardService{
 
         //사용자가 이전에 해당게시물에 포인트를 사용하였는지 확인
         PointDTO pointDTO = boardPointMapper.readUsePoint(userId, boardId);
-        PointDTO newPoint = new PointDTO(point, userId, boardId);
+        PointDTO newPoint = new PointDTO();
+        newPoint.setPoint(point);
+        newPoint.setBoard_id(boardId);
+        newPoint.setUser_id(userId);
+        System.out.println(pointDTO.getBoard_id());
         if(pointDTO == null) {
             //이전에 좋/싫 기록이 없다면
+            System.out.println("make row");
             boardMapper.revisePoint(point, boardId);
-
             boardPointMapper.insertPointUsed(newPoint);
             return true;
         }
         else {
             //좋/싫 기록이 있지만 취소했던 경우
+            System.out.println(123);
             if (pointDTO.getIs_deleted() == 1) {
                 boardPointMapper.rePoint(newPoint);
                 boardMapper.revisePoint(point, boardId);
                 return true;
             }
             //그외
-           else
+            else {
+                System.out.println("!!!");
                 return false;
+            }
         }
     }
 
