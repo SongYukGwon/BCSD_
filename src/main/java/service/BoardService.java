@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import repository.BoardMapper;
-import repository.BoardPointMapper;
+import repository.PointMapper;
 import service.interfaces.IBoardService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,7 +19,7 @@ public class BoardService implements IBoardService{
     BoardMapper boardMapper;
 
     @Autowired
-    BoardPointMapper boardPointMapper;
+    PointMapper pointMapper;
 
 
     public Long CheckUserId(){
@@ -88,30 +88,30 @@ public class BoardService implements IBoardService{
         long userId = CheckUserId();
 
         //사용자가 이전에 해당게시물에 포인트를 사용하였는지 확인
-        PointDTO pointDTO = boardPointMapper.readUsePoint(userId, boardId);
+        PointDTO pointDTO = pointMapper.readUsePoint(userId, boardId);
+
+        //새로운 PointDTO 생성
         PointDTO newPoint = new PointDTO();
         newPoint.setPoint(point);
         newPoint.setBoard_id(boardId);
         newPoint.setUser_id(userId);
-        System.out.println(pointDTO.getBoard_id());
+
         if(pointDTO == null) {
             //이전에 좋/싫 기록이 없다면
-            System.out.println("make row");
             boardMapper.revisePoint(point, boardId);
-            boardPointMapper.insertPointUsed(newPoint);
+            pointMapper.insertPointUsed(newPoint);
             return true;
         }
         else {
             //좋/싫 기록이 있지만 취소했던 경우
             System.out.println(123);
             if (pointDTO.getIs_deleted() == 1) {
-                boardPointMapper.rePoint(newPoint);
+                pointMapper.rePoint(newPoint);
                 boardMapper.revisePoint(point, boardId);
                 return true;
             }
             //그외
             else {
-                System.out.println("!!!");
                 return false;
             }
         }
@@ -123,7 +123,7 @@ public class BoardService implements IBoardService{
 
         if(userId == null)
             throw new Exception("로그인이 되어있는 상태여야 합니다.");
-        PointDTO pointDTO = boardPointMapper.readUsePoint(userId, boardId);
+        PointDTO pointDTO = pointMapper.readUsePoint(userId, boardId);
 
         if(pointDTO == null)
             throw new Exception("취소할 like/unlike 기록이 없습니다.");
@@ -131,7 +131,7 @@ public class BoardService implements IBoardService{
         if(pointDTO.getIs_deleted() == 1)
             throw new Exception("이미 취소되어있는 like/unlike입니다.");
 
-        boardPointMapper.cancelPoint(userId, boardId);
+        pointMapper.cancelPoint(userId, boardId);
         return true;
     }
 
