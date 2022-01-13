@@ -8,4 +8,5 @@ public interface IUserService {
     boolean login(UserDTO user);
     boolean logout();
     boolean quit(String password);
+    UserDTO readUser() throws Exception;
 }

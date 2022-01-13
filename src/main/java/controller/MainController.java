@@ -23,7 +23,11 @@ public class MainController {
         return "signUp";
     }
 
-
+    @RequestMapping(value = "/profile", method = RequestMethod.GET)
+    @ApiOperation(value = "로그아웃", notes="로그아웃을 위한 api입니다.")
+    public UserDTO profile() throws Exception {
+        return userService.readUser();
+    }
 
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     @ApiOperation(value = "로그아웃", notes="로그아웃을 위한 api입니다.")

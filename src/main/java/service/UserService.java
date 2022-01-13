@@ -19,6 +19,7 @@ public class UserService implements IUserService {
     @Autowired
     private BCryptImpl bCrypt;
 
+
     @Override
     public boolean signUp(UserDTO user){
         //이미 가입된 아이디가 없는지 확인
@@ -83,6 +84,17 @@ public class UserService implements IUserService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public UserDTO readUser() throws Exception {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        Long CUserId = (Long)request.getSession().getAttribute("userId");
+
+        if(CUserId == null)
+            throw new Exception("Not Login");
+        UserDTO user = userMapper.findWithUserId(CUserId);
+        return user;
     }
 }
 
