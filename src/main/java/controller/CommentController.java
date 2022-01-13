@@ -72,4 +72,13 @@ public class CommentController {
         else
             return new ResponseEntity<>("Fail like Comment", HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @RequestMapping(value = {"/{commentId}/like/cancel","/{commentId}/unlike/cancel"}, method = RequestMethod.POST)
+    @ApiOperation(value = "좋/싫 취소", notes = "게시글을 좋/싫 취소합니다.")
+    public ResponseEntity<String> cancelCommentPoint(@PathVariable("commentId")Long commentId) throws Exception {
+        if(commentService.cancelCommentPoint(commentId))
+            return new ResponseEntity<>("Success cancel point", HttpStatus.OK);
+        else
+            return new ResponseEntity<>("Fail cancel Point", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }

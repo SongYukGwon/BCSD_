@@ -6,7 +6,11 @@ public class PointDTO {
     private long user_id;
     private long board_id;
     private int is_deleted;
+    private long comment_id;
 
+    public long getCommentId(){return comment_id;}
+
+    public void setCommentId(long comment_id){this.comment_id = comment_id;}
 
     public int getPoint() {
         return point;

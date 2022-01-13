@@ -1,11 +1,13 @@
 package service;
 
 import domain.CommentDTO;
+import domain.PointDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import repository.CommentMapper;
+import repository.PointMapper;
 import service.interfaces.ICommentService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +18,9 @@ public class CommentService implements ICommentService {
 
     @Autowired
     CommentMapper commentMapper;
+
+    @Autowired
+    PointMapper pointMapper;
 
     public Long CheckUserId(){
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
@@ -63,11 +68,32 @@ public class CommentService implements ICommentService {
             throw new Exception("deleted comment error");
 
         //사용자가 이전에 추천했는지 확인 필요
+        PointDTO pointDTO = pointMapper.readUseCommentPoint(userId, commentId);
 
+        //새로운 PointDTO 생성
+        PointDTO newPoint = new PointDTO();
+        newPoint.setPoint(point);
+        newPoint.setCommentId(commentId);
+        newPoint.setUser_id(userId);
 
-
-        commentMapper.revisePointComment(point, commentId);
-        return true;
+        if(pointDTO == null) {
+            //이전에 좋/싫 기록이 없다면
+            commentMapper.revisePointComment(point, commentId);
+            pointMapper.insertCommentPointUsed(newPoint);
+            return true;
+        }
+        else {
+            //좋/싫 기록이 있지만 취소했던 경우
+            if (pointDTO.getIs_deleted() == 1) {
+                pointMapper.reCommentPoint(newPoint);
+                commentMapper.revisePointComment(point, commentId);
+                return true;
+            }
+            //그외
+            else {
+                return false;
+            }
+        }
     }
 
     @Override
@@ -89,6 +115,26 @@ public class CommentService implements ICommentService {
 
         List<CommentDTO> comments = commentMapper.commentList(boardId);
         return comments;
+    }
+
+    @Override
+    public boolean cancelCommentPoint(Long commentId) throws Exception {
+        Long userId = CheckUserId();
+
+        if(userId == null)
+            throw new Exception("로그인이 되어있는 상태여야 합니다.");
+
+        //기존의 포인트db 확인
+        PointDTO pointDTO = pointMapper.readUseCommentPoint(userId, commentId);
+
+        if(pointDTO == null)
+            throw new Exception("취소할 like/unlike 기록이 없습니다.");
+
+        if(pointDTO.getIs_deleted() == 1)
+            throw new Exception("이미 취소되어있는 like/unlike입니다.");
+
+        pointMapper.cancelCommentPoint(userId, commentId);
+        return true;
     }
 
 }
