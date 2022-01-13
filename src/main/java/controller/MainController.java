@@ -23,6 +23,8 @@ public class MainController {
         return "signUp";
     }
 
+
+
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     @ApiOperation(value = "로그아웃", notes="로그아웃을 위한 api입니다.")
     public ResponseEntity<String> logout(){

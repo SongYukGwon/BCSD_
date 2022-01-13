@@ -1,6 +1,7 @@
 package controller;
 
 import domain.BoardDTO;
+import domain.CategoryDTO;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import service.BoardService;
+import service.CategoryService;
 
 import java.util.List;
 
@@ -18,6 +20,23 @@ public class BoardController {
     @Autowired
     BoardService boardService;
 
+    @Autowired
+    CategoryService categoryService;
+
+    //등록되어있는 카테고리 검색
+    @RequestMapping(value = {"/category"}, method = RequestMethod.GET)
+    @ApiOperation(value = "카테고리 검색", notes = "등록되어있는 카테고리를 나열 합니다.")
+    public List<CategoryDTO> readCategoryList(){
+        return categoryService.readCategoryList();
+    }
+
+    //카테고리에 포함될 게시물 검색
+    @RequestMapping(value = {"/{categoryId}"}, method = RequestMethod.GET)
+    @ApiOperation(value = "카테고리내 게시물 검색", notes = "카테고리에 등록되어있는 게시물을 나열 합니다.")
+    public List<BoardDTO> readCategoryList(@PathVariable("categoryId") Long categoryId){
+        return categoryService.readBoardInCategory(categoryId);
+    }
+
     //게시글 목록 읽기
     @RequestMapping(value = "", method = RequestMethod.GET)
     @ApiOperation(value = "게시글 목록 읽기", notes = "게시글 목록을 읽어옵니다.")
@@ -27,9 +46,10 @@ public class BoardController {
     }
     
     //게시글 생성
-    @RequestMapping(value = "/create", method = RequestMethod.POST)
+    @RequestMapping(value = "/{categoryId}/create", method = RequestMethod.POST)
     @ApiOperation(value = "게시글 생성", notes = "게시글을 생성합니다.")
-    public ResponseEntity<String> makeBoard(@RequestBody BoardDTO board){
+    public ResponseEntity<String> makeBoard(@RequestBody BoardDTO board, @PathVariable("categoryId") Long categoryId){
+        board.setCategory_id(categoryId);
         if(boardService.makeBoard(board))
             return new ResponseEntity<>("Success make board", HttpStatus.OK);
         else
@@ -37,7 +57,7 @@ public class BoardController {
     }
 
     //게시글 삭제
-    @RequestMapping(value = "/{boardId}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/{categoryId}/{boardId}", method = RequestMethod.DELETE)
     public ResponseEntity<String> deleteBoard(@PathVariable("boardId") Long boardId) throws Exception {
         if(boardService.deleteBoard(boardId))
             return new ResponseEntity<>("Success delete board", HttpStatus.OK);
@@ -46,7 +66,7 @@ public class BoardController {
     }
 
     //게시글 읽기
-    @RequestMapping(value = "/{boardId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{categoryId}/{boardId}", method = RequestMethod.GET)
     @ApiOperation(value = " 게시글 읽기", notes = "게시글을 읽어옵니다")
     public ResponseEntity<BoardDTO> readBoard(@PathVariable("boardId") Long boardId) throws Exception {
         BoardDTO board = boardService.readBoard(boardId);
@@ -54,7 +74,7 @@ public class BoardController {
     }
 
     //게시글 수정
-    @RequestMapping(value = "/{boardId}", method = RequestMethod.POST)
+    @RequestMapping(value = "/{categoryId}/{boardId}", method = RequestMethod.POST)
     @ApiOperation(value = "게시글 수정", notes = "게시글을 수정합니다.")
     public ResponseEntity<String> updateBoard(@RequestBody BoardDTO board, @PathVariable("boardId") Long boardId) throws Exception {
         if(boardService.updateBoard(board, boardId))
@@ -64,7 +84,7 @@ public class BoardController {
     }
 
     //게시글 좋아요
-    @RequestMapping(value = "/{boardId}/like", method = RequestMethod.POST)
+    @RequestMapping(value = "/{categoryId}/{boardId}/like", method = RequestMethod.POST)
     @ApiOperation(value = "게시글 좋아요", notes = "게시글을 좋아요합니다.")
     public ResponseEntity<String> upPointBoard(@PathVariable("boardId") Long boardId){
         if(boardService.revisePoint(1, boardId))
@@ -74,7 +94,7 @@ public class BoardController {
     }
 
     //게시글 싫어요
-    @RequestMapping(value = "/{boardId}/unlike", method = RequestMethod.POST)
+    @RequestMapping(value = "/{categoryId}/{boardId}/unlike", method = RequestMethod.POST)
     @ApiOperation(value = "게시글 싫어요", notes = "게시글을 싫어요 합니다.")
     public ResponseEntity<String> downPointBoard(@PathVariable("boardId") Long boardId){
         if(boardService.revisePoint(-1, boardId))
@@ -83,7 +103,7 @@ public class BoardController {
             return new ResponseEntity<>("Fail down Point", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @RequestMapping(value = {"/{boardId}/like/cancel","/{boardId}/unlike/cancel"}, method = RequestMethod.POST)
+    @RequestMapping(value = {"/{categoryId}/{boardId}/like/cancel","/{categoryId}/{boardId}/unlike/cancel"}, method = RequestMethod.POST)
     @ApiOperation(value = "좋/싫 취소", notes = "게시글을 좋/싫 취소합니다.")
     public ResponseEntity<String> cancelPoint(@PathVariable("boardId") Long boardId) throws Exception {
         if(boardService.cancelPoint(boardId))
