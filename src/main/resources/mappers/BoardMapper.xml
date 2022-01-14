@@ -14,9 +14,9 @@
         SELECT * FROM board WHERE (content LIKE CONCAT('%', #{sen}, '%')) AND (is_deleted = 0)
     </select>
     <select id="findBoardInUser" resultType="domain.BoardDTO">
-        SELECT (title, content, point, view, name) FROM board JOIN user
-        ON (user.is_deleted = 0) AND (board.is_deleted = 0) AND (user_id = user.id)
-        WHERE name LIKE CONCAT('%', #{sen}, '%'))
+        SELECT title, content, point, view, name FROM board JOIN user
+        ON user.is_deleted = 0 AND board.is_deleted = 0 AND board.user_id = user.id
+        WHERE (name LIKE CONCAT('%', #{sen}, '%'))
     </select>
     <insert id="makeBoard">
         INSERT INTO board (title, user_id, content, category_id) VALUES (#{title}, #{user_Id},#{content}, #{category_id})

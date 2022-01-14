@@ -87,8 +87,8 @@ public class BoardController {
     //게시물 검색
     @RequestMapping(value = "/find", method = RequestMethod.POST)
     @ApiOperation(value = "게시물 검색", notes = "게시글을 검색합니다")
-    public List<BoardDTO> findBoard(@RequestParam(value = "keyword")String keyword, @RequestParam(value = "type", required = false) int type) throws Exception {
-        return boardService.findBoard(keyword, type);
+    public ResponseEntity<List<BoardDTO>> findBoard(@RequestParam(value = "keyword")String keyword, @RequestParam(value = "type", required = false) int type) throws Exception {
+        return new ResponseEntity<>(boardService.findBoard(keyword, type), HttpStatus.OK);
     }
 
     //게시글 좋아요

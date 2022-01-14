@@ -25,8 +25,8 @@ public class MainController {
 
     @RequestMapping(value = "/profile", method = RequestMethod.GET)
     @ApiOperation(value = "로그아웃", notes="로그아웃을 위한 api입니다.")
-    public UserDTO profile() throws Exception {
-        return userService.readUser();
+    public ResponseEntity<UserDTO> profile() throws Exception {
+        return new ResponseEntity<>(userService.readUser(), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
