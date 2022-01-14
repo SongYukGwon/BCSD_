@@ -25,16 +25,16 @@ public class BoardController {
 
     //등록되어있는 카테고리 검색
     @RequestMapping(value = {"/category"}, method = RequestMethod.GET)
-    @ApiOperation(value = "카테고리 검색", notes = "등록되어있는 카테고리를 나열 합니다.")
-    public List<CategoryDTO> readCategoryList(){
-        return categoryService.readCategoryList();
+    @ApiOperation(value = "카테고리", notes = "등록되어있는 카테고리를 나열 합니다.")
+    public ResponseEntity<List<CategoryDTO>> readCategoryList(){
+        return new ResponseEntity<>(categoryService.readCategoryList(),HttpStatus.OK);
     }
 
     //카테고리에 포함될 게시물 검색
     @RequestMapping(value = {"/{categoryId}"}, method = RequestMethod.GET)
-    @ApiOperation(value = "카테고리내 게시물 검색", notes = "카테고리에 등록되어있는 게시물을 나열 합니다.")
-    public List<BoardDTO> readCategoryList(@PathVariable("categoryId") Long categoryId){
-        return categoryService.readBoardInCategory(categoryId);
+    @ApiOperation(value = "카테고리내 게시물", notes = "카테고리에 등록되어있는 게시물을 나열 합니다.")
+    public ResponseEntity<List<BoardDTO>> readCategoryList(@PathVariable("categoryId") Long categoryId){
+        return new ResponseEntity<>(categoryService.readBoardInCategory(categoryId),HttpStatus.OK);
     }
 
     //게시글 목록 읽기
@@ -58,6 +58,7 @@ public class BoardController {
 
     //게시글 삭제
     @RequestMapping(value = "/{categoryId}/{boardId}", method = RequestMethod.DELETE)
+    @ApiOperation(value = " 게시글 삭제", notes = "게시글을 삭제합니다.")
     public ResponseEntity<String> deleteBoard(@PathVariable("boardId") Long boardId) throws Exception {
         if(boardService.deleteBoard(boardId))
             return new ResponseEntity<>("Success delete board", HttpStatus.OK);
@@ -81,6 +82,13 @@ public class BoardController {
             return new ResponseEntity<>("Success update board", HttpStatus.OK);
         else
             return new ResponseEntity<>("Fail update", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    //게시물 검색
+    @RequestMapping(value = "/find", method = RequestMethod.POST)
+    @ApiOperation(value = "게시물 검색", notes = "게시글을 검색합니다")
+    public List<BoardDTO> findBoard(@RequestParam(value = "keyword")String keyword, @RequestParam(value = "type", required = false) int type) throws Exception {
+        return boardService.findBoard(keyword, type);
     }
 
     //게시글 좋아요
@@ -111,5 +119,7 @@ public class BoardController {
         else
             return new ResponseEntity<>("Fail cancel Point", HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+
 
 }

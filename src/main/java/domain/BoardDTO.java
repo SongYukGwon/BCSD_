@@ -10,6 +10,7 @@ public class BoardDTO {
     private long id;
     private int point;
     private long category_id;
+    private String name;
     private Timestamp created_at;
     private Timestamp updated_at;
     private int is_deleted;
@@ -18,6 +19,10 @@ public class BoardDTO {
         String tmp = "title : " + title + "\nview : " + view;
         return tmp;
     }
+
+    public String getName(){return name;}
+
+    public void setName(String name){this.name = name;}
 
     public long getCategory_id(){return category_id;}
 

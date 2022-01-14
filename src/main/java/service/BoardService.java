@@ -136,13 +136,22 @@ public class BoardService implements IBoardService{
     }
 
     @Override
-    public List<BoardDTO> findBoard(String title){
+    public List<BoardDTO> findBoard(String sen, int type) throws Exception {
 
         //해당 제목을 가진 게시물 검색
-        List<BoardDTO> boards = boardMapper.findBoard(title);
-
-        return boards;
-
+        if(type==1){
+            List<BoardDTO> boards = boardMapper.findBoardInTitle(sen);
+            return boards;
+        }
+        else if(type == 2) {
+            List<BoardDTO> boards = boardMapper.findBoardInContent(sen);
+            return boards;
+        }else if(type == 3){
+            List<BoardDTO> boards = boardMapper.findBoardInUser(sen);
+            return boards;
+        }else{
+            throw new Exception("not match type");
+        }
     }
 
     @Override

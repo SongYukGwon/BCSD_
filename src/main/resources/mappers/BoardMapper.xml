@@ -7,8 +7,16 @@
     <select id="readBoard" resultType="domain.BoardDTO">
         SELECT * FROM board WHERE id = #{boardId}
     </select>
-    <select id="findBoard" resultType="domain.BoardDTO">
-        SELECT * FROM board WHERE (title LIKE CONCAT('%', #{title}, '%')) AND (is_deleted = 0)
+    <select id="findBoardInTitle" resultType="domain.BoardDTO">
+        SELECT * FROM board WHERE (title LIKE CONCAT('%', #{sen}, '%')) AND (is_deleted = 0)
+    </select>
+    <select id="findBoardInContent" resultType="domain.BoardDTO">
+        SELECT * FROM board WHERE (content LIKE CONCAT('%', #{sen}, '%')) AND (is_deleted = 0)
+    </select>
+    <select id="findBoardInUser" resultType="domain.BoardDTO">
+        SELECT (title, content, point, view, name) FROM board JOIN user
+        ON (user.is_deleted = 0) AND (board.is_deleted = 0) AND (user_id = user.id)
+        WHERE name LIKE CONCAT('%', #{sen}, '%'))
     </select>
     <insert id="makeBoard">
         INSERT INTO board (title, user_id, content, category_id) VALUES (#{title}, #{user_Id},#{content}, #{category_id})

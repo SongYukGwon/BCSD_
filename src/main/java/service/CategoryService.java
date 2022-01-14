@@ -3,11 +3,13 @@ package service;
 import domain.BoardDTO;
 import domain.CategoryDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import repository.CategoryMapper;
 import service.interfaces.ICategoryService;
 
 import java.util.List;
 
+@Service
 public class CategoryService implements ICategoryService {
 
     @Autowired
@@ -15,7 +17,8 @@ public class CategoryService implements ICategoryService {
 
     @Override
     public List<CategoryDTO> readCategoryList() {
-        return categoryMapper.readCategoryList();
+        List<CategoryDTO> abc = categoryMapper.readCategoryList();
+        return abc;
     }
 
     @Override
