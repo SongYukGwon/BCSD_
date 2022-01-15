@@ -136,18 +136,24 @@ public class BoardService implements IBoardService{
     }
 
     @Override
-    public List<BoardDTO> findBoard(String sen, int type) throws Exception {
+    public List<BoardDTO> findBoard(String sen, int type, int page) throws Exception {
+
+        //페이지
+        if(page < 1){
+            page = 0;
+        }else
+            page = page*10;
 
         //해당 제목을 가진 게시물 검색
         if(type==1){
-            List<BoardDTO> boards = boardMapper.findBoardInTitle(sen);
+            List<BoardDTO> boards = boardMapper.findBoardInTitle(sen,page);
             return boards;
         }
         else if(type == 2) {
-            List<BoardDTO> boards = boardMapper.findBoardInContent(sen);
+            List<BoardDTO> boards = boardMapper.findBoardInContent(sen,page);
             return boards;
         }else if(type == 3){
-            List<BoardDTO> boards = boardMapper.findBoardInUser(sen);
+            List<BoardDTO> boards = boardMapper.findBoardInUser(sen,page);
             return boards;
         }else{
             throw new Exception("not match type");
@@ -156,6 +162,7 @@ public class BoardService implements IBoardService{
 
     @Override
     public BoardDTO readBoard(long boardId) throws Exception{
+
         //게시글 정보 불러오기
         BoardDTO board = boardMapper.readBoard(boardId);
 
@@ -169,8 +176,13 @@ public class BoardService implements IBoardService{
         return board;
     }
 
-    public List<BoardDTO> boardList(){
-        List<BoardDTO> boardList = boardMapper.boardList();
-        return boardList;
+    public List<BoardDTO> boardList(int page){
+        //페이지
+        if(page < 1){
+            page = 0;
+        }else
+            page = page*10;
+
+        return boardMapper.boardList(page);
     }
 }

@@ -40,8 +40,8 @@ public class BoardController {
     //게시글 목록 읽기
     @RequestMapping(value = "", method = RequestMethod.GET)
     @ApiOperation(value = "게시글 목록 읽기", notes = "게시글 목록을 읽어옵니다.")
-    public ResponseEntity<List<BoardDTO>> readBoardList(){
-        List<BoardDTO> boardList= boardService.boardList();
+    public ResponseEntity<List<BoardDTO>> readBoardList(@RequestParam("page")int page){
+        List<BoardDTO> boardList= boardService.boardList(page);
         return new ResponseEntity<>(boardList, HttpStatus.OK);
     }
     
@@ -87,8 +87,8 @@ public class BoardController {
     //게시물 검색
     @RequestMapping(value = "/find", method = RequestMethod.POST)
     @ApiOperation(value = "게시물 검색", notes = "게시글을 검색합니다")
-    public ResponseEntity<List<BoardDTO>> findBoard(@RequestParam(value = "keyword")String keyword, @RequestParam(value = "type", required = false) int type) throws Exception {
-        return new ResponseEntity<>(boardService.findBoard(keyword, type), HttpStatus.OK);
+    public ResponseEntity<List<BoardDTO>> findBoard(@RequestParam("page") int page, @RequestParam(value = "keyword")String keyword, @RequestParam(value = "type", required = false) int type) throws Exception {
+        return new ResponseEntity<>(boardService.findBoard(keyword, type, page*10-1), HttpStatus.OK);
     }
 
     //게시글 좋아요

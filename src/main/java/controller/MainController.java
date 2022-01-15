@@ -24,7 +24,7 @@ public class MainController {
     }
 
     @RequestMapping(value = "/profile", method = RequestMethod.GET)
-    @ApiOperation(value = "로그아웃", notes="로그아웃을 위한 api입니다.")
+    @ApiOperation(value = "프로필", notes="프로필 창을 위한 api입니다.")
     public ResponseEntity<UserDTO> profile() throws Exception {
         return new ResponseEntity<>(userService.readUser(), HttpStatus.OK);
     }

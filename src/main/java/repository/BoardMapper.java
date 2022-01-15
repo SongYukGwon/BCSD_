@@ -22,12 +22,12 @@ public interface BoardMapper {
     //좋아요 싫어요 포인트변화
     void revisePoint(@Param("point") int point, @Param("boardId") Long boardId);
     //게시글 제목으로 검색
-    List<BoardDTO> findBoardInTitle(String sen);
+    List<BoardDTO> findBoardInTitle(@Param("sen")String sen, @Param("page") int page);
     //게시글 내용으로 검색
-    List<BoardDTO> findBoardInContent(String sen);
+    List<BoardDTO> findBoardInContent(@Param("sen")String sen, @Param("page") int page);
     //게시글 작성자로 검색
-    List<BoardDTO> findBoardInUser(String sen);
+    List<BoardDTO> findBoardInUser(@Param("sen")String sen, @Param("page") int page);
     //게시글 목록
-    List<BoardDTO> boardList();
+    List<BoardDTO> boardList(int page);
 
 }

@@ -3,20 +3,26 @@
 <mapper namespace="repository.BoardMapper">
     <select id="boardList" resultType="domain.BoardDTO">
         SELECT * FROM board WHERE is_deleted = 0
+        LIMIT #{page}, 15
     </select>
     <select id="readBoard" resultType="domain.BoardDTO">
         SELECT * FROM board WHERE id = #{boardId}
     </select>
     <select id="findBoardInTitle" resultType="domain.BoardDTO">
-        SELECT * FROM board WHERE (title LIKE CONCAT('%', #{sen}, '%')) AND (is_deleted = 0)
+        SELECT * FROM board
+        WHERE (title LIKE CONCAT('%', #{sen}, '%')) AND (is_deleted = 0)
+        LIMIT #{page}, 15
     </select>
     <select id="findBoardInContent" resultType="domain.BoardDTO">
-        SELECT * FROM board WHERE (content LIKE CONCAT('%', #{sen}, '%')) AND (is_deleted = 0)
+        SELECT * FROM board
+        WHERE (content LIKE CONCAT('%', #{sen}, '%')) AND (is_deleted = 0)
+        LIMIT #{page}, 15
     </select>
     <select id="findBoardInUser" resultType="domain.BoardDTO">
         SELECT title, content, point, view, name FROM board JOIN user
         ON user.is_deleted = 0 AND board.is_deleted = 0 AND board.user_id = user.id
         WHERE (name LIKE CONCAT('%', #{sen}, '%'))
+        LIMIT #{page}, 15
     </select>
     <insert id="makeBoard">
         INSERT INTO board (title, user_id, content, category_id) VALUES (#{title}, #{user_Id},#{content}, #{category_id})
