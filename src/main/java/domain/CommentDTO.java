@@ -11,6 +11,11 @@ public class CommentDTO {
     private int point;
     private Timestamp updated_at;
     private int is_deleted;
+    private long parent_comment_id;
+
+    public long getParent_comment_id(){return parent_comment_id;}
+
+    public void setParent_comment_id(long parent_comment_id){this.parent_comment_id = parent_comment_id;}
 
     public int getIs_deleted(){return is_deleted;}
 

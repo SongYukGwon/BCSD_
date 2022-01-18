@@ -82,4 +82,13 @@ public class CommentController {
             return new ResponseEntity<>("Fail cancel Point", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @RequestMapping(value = "/{commentId}/reply", method = RequestMethod.POST)
+    @ApiOperation(value = "대댓글", notes = "대댓글을 생성합니다.")
+    public ResponseEntity<String> replyComment(@PathVariable("commentId")Long commentId, @RequestBody CommentDTO comment, @PathVariable("boardId") Long boardId) throws Exception {
+        if (commentService.replyComment(boardId, commentId, comment))
+            return new ResponseEntity<>("Success  reply Comment", HttpStatus.OK);
+        else
+            return new ResponseEntity<>("Fail reply Comment", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
 }

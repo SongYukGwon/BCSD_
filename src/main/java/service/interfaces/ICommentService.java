@@ -11,4 +11,5 @@ public interface ICommentService {
     boolean updateComment(CommentDTO comment, long commentID);
     List<CommentDTO> commentList(Long boardId);
     boolean cancelCommentPoint(Long commentId) throws Exception;
+    boolean replyComment(Long boardId, Long commentId, CommentDTO comment) throws Exception;
 }

@@ -15,4 +15,5 @@ public interface CommentMapper {
     void updateComment(CommentDTO comment) ;
     void revisePointComment(@Param("point") int point, @Param("commentId") long commentId);
     List<CommentDTO> commentList(Long boardId);
+    void replyComment(CommentDTO comment);
 }

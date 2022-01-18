@@ -3,6 +3,7 @@
 <mapper namespace="repository.CommentMapper">
     <select id="commentList" resultType="domain.CommentDTO">
         SELECT * FROM comment WHERE is_deleted = 0 AND board_id = #{boardId}
+        ORDER BY IF(ISNULL(parent_comment_id), id, parent_comment_id)
     </select>
     <select id="readComment" resultType="domain.CommentDTO">
         SELECT * FROM comment WHERE id = #{commentId}
@@ -25,5 +26,9 @@
         SET point = point + #{point}
         WHERE id = #{commentId}
     </update>
+    <insert id="replyComment">
+        INSERT INTO comment (content, user_id, board_id, parent_comment_id)
+        VALUES (#{content}, #{user_Id}, #{board_Id}, #{parent_comment_id})
+    </insert>
 
 </mapper>

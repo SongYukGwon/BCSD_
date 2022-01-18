@@ -11,6 +11,7 @@ import repository.PointMapper;
 import service.interfaces.ICommentService;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.stream.events.Comment;
 import java.util.List;
 
 @Service
@@ -134,6 +135,27 @@ public class CommentService implements ICommentService {
             throw new Exception("이미 취소되어있는 like/unlike입니다.");
 
         pointMapper.cancelCommentPoint(userId, commentId);
+        return true;
+    }
+
+    @Override
+    public boolean replyComment(Long boardId, Long commentId, CommentDTO comment) throws Exception {
+        CommentDTO chComment = commentMapper.readComment(commentId);
+
+        if(chComment == null)
+            throw new Exception("not exist comment");
+        else if(chComment.getBoard_id() != boardId)
+            throw new Exception("not match boardId");
+
+        Long userId = CheckUserId();
+        if(userId == null)
+            throw new Exception("not login");
+
+        comment.setUser_Id(userId);
+        comment.setBoard_id(boardId);
+        comment.setParent_comment_id(commentId);
+
+        commentMapper.replyComment(comment);
         return true;
     }
 
