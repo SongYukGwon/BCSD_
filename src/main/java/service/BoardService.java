@@ -83,56 +83,49 @@ public class BoardService implements IBoardService{
     }
 
     @Override
-    public boolean revisePoint(int point, Long boardId){
+    public boolean revisePoint(PointDTO point) throws Exception {
         //사용자 확인
-        long userId = CheckUserId();
+        Long userId = CheckUserId();
+
+        if(userId == null)
+            throw new Exception("not login");
+        else if(point.getUser_id() != userId)
+            throw new Exception("not match user");
+
+        //point 이상 유무 확인
+        if(point.getPoint() != 1 && point.getPoint()!=-1)
+            throw new Exception("Wrong Point");
+
+        //게시물 정보가 있는지 확인
+        if(point.getBoard_id() == null)
+            throw new Exception("not exist board info");
 
         //사용자가 이전에 해당게시물에 포인트를 사용하였는지 확인
-        PointDTO pointDTO = pointMapper.readUsePoint(userId, boardId);
-
-        //새로운 PointDTO 생성
-        PointDTO newPoint = new PointDTO();
-        newPoint.setPoint(point);
-        newPoint.setBoard_id(boardId);
-        newPoint.setUser_id(userId);
+        PointDTO pointDTO = pointMapper.readUsePoint(userId, point.getBoard_id());
 
         if(pointDTO == null) {
             //이전에 좋/싫 기록이 없다면
-            boardMapper.revisePoint(point, boardId);
-            pointMapper.insertPointUsed(newPoint);
+            boardMapper.revisePoint(point);
+            pointMapper.insertPointUsed(point);
             return true;
         }
         else {
             //좋/싫 기록이 있지만 취소했던 경우
-            System.out.println(123);
-            if (pointDTO.getIs_deleted() == 1) {
-                pointMapper.rePoint(newPoint);
-                boardMapper.revisePoint(point, boardId);
+            //좋/싫 기록이 있지만 이전과는 반대된 point를 입력하는 경우
+            if (pointDTO.getIs_deleted() == 1 || pointDTO.getPoint() != point.getPoint()) {
+                boardMapper.revisePoint(point);
+                pointMapper.rePoint(point);
                 return true;
             }
-            //그외
-            else {
+            //좋/싫 기록이 있고 같은 똑같은 입력을 했을 경우 취소
+            else{
+                //포인트를 원래 수치로 돌리고 point db delete true 처리
+                point.setPoint(point.getPoint()*-1);
+                boardMapper.revisePoint(point);
+                pointMapper.cancelPoint(point);
                 return false;
             }
         }
-    }
-
-    @Override
-    public boolean cancelPoint(Long boardId) throws Exception {
-        Long userId = CheckUserId();
-
-        if(userId == null)
-            throw new Exception("로그인이 되어있는 상태여야 합니다.");
-        PointDTO pointDTO = pointMapper.readUsePoint(userId, boardId);
-
-        if(pointDTO == null)
-            throw new Exception("취소할 like/unlike 기록이 없습니다.");
-
-        if(pointDTO.getIs_deleted() == 1)
-            throw new Exception("이미 취소되어있는 like/unlike입니다.");
-
-        pointMapper.cancelPoint(userId, boardId);
-        return true;
     }
 
     @Override

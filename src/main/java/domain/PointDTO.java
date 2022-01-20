@@ -2,15 +2,15 @@ package domain;
 
 public class PointDTO {
     private int point;
-    private long id;
-    private long user_id;
-    private long board_id;
+    private Long id;
+    private Long user_id;
+    private Long board_id;
     private int is_deleted;
-    private long comment_id;
+    private Long comment_id;
 
-    public long getCommentId(){return comment_id;}
+    public Long getCommentId(){return comment_id;}
 
-    public void setCommentId(long comment_id){this.comment_id = comment_id;}
+    public void setCommentId(Long comment_id){this.comment_id = comment_id;}
 
     public int getPoint() {
         return point;
@@ -20,26 +20,27 @@ public class PointDTO {
         this.point = point;
     }
 
-    public long getBoard_id() {
+    public Long getBoard_id() {
         return board_id;
     }
-    public void setBoard_id(long board_id){
+
+    public void setBoard_id(Long board_id){
         this.board_id = board_id;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id){
+    public void setId(Long id){
         this.id = id;
     }
 
-    public long getUser_id() {
+    public Long getUser_id() {
         return user_id;
     }
 
-    public void setUser_id(long user_id) {
+    public void setUser_id(Long user_id) {
         this.user_id = user_id;
     }
 

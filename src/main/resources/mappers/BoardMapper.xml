@@ -47,7 +47,7 @@
     <update id="revisePoint">
         UPDATE board
         SET point = point + #{point}
-        WHERE id = #{boardId}
+        WHERE id = #{board_id}
     </update>
 
 </mapper>

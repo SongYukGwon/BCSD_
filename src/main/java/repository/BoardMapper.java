@@ -1,6 +1,7 @@
 package repository;
 
 import domain.BoardDTO;
+import domain.PointDTO;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -20,7 +21,7 @@ public interface BoardMapper {
     //수정
     void updateBoard(BoardDTO board);
     //좋아요 싫어요 포인트변화
-    void revisePoint(@Param("point") int point, @Param("boardId") Long boardId);
+    void revisePoint(PointDTO point);
     //게시글 제목으로 검색
     List<BoardDTO> findBoardInTitle(@Param("sen")String sen, @Param("page") int page);
     //게시글 내용으로 검색

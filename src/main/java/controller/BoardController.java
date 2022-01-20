@@ -2,6 +2,7 @@ package controller;
 
 import domain.BoardDTO;
 import domain.CategoryDTO;
+import domain.PointDTO;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -44,12 +45,11 @@ public class BoardController {
         List<BoardDTO> boardList= boardService.boardList(page);
         return new ResponseEntity<>(boardList, HttpStatus.OK);
     }
-    
+
     //게시글 생성
-    @RequestMapping(value = "/{categoryId}/create", method = RequestMethod.POST)
+    @RequestMapping(value = "", method = RequestMethod.POST)
     @ApiOperation(value = "게시글 생성", notes = "게시글을 생성합니다.")
-    public ResponseEntity<String> makeBoard(@RequestBody BoardDTO board, @PathVariable("categoryId") Long categoryId){
-        board.setCategory_id(categoryId);
+    public ResponseEntity<String> makeBoard(@RequestBody BoardDTO board){
         if(boardService.makeBoard(board))
             return new ResponseEntity<>("Success make board", HttpStatus.OK);
         else
@@ -87,39 +87,30 @@ public class BoardController {
     //게시물 검색
     @RequestMapping(value = "/find", method = RequestMethod.POST)
     @ApiOperation(value = "게시물 검색", notes = "게시글을 검색합니다")
-    public ResponseEntity<List<BoardDTO>> findBoard(@RequestParam("page") int page, @RequestParam(value = "keyword")String keyword, @RequestParam(value = "type", required = false) int type) throws Exception {
+    public ResponseEntity<List<BoardDTO>> findBoard(@RequestParam("page") int page, @RequestParam("keyword")String keyword, @RequestParam(value = "type", required = false) int type) throws Exception {
         return new ResponseEntity<>(boardService.findBoard(keyword, type, page*10-1), HttpStatus.OK);
     }
 
+
+    //수정 필요
+
     //게시글 좋아요
     @RequestMapping(value = "/{categoryId}/{boardId}/like", method = RequestMethod.POST)
-    @ApiOperation(value = "게시글 좋아요", notes = "게시글을 좋아요합니다.")
-    public ResponseEntity<String> upPointBoard(@PathVariable("boardId") Long boardId){
-        if(boardService.revisePoint(1, boardId))
+    @ApiOperation(value = "게시글 좋아요", notes = "게시글을 좋아요/좋아요취소 합니다.")
+    public ResponseEntity<String> upPointBoard(@RequestBody PointDTO point) throws Exception {
+        if(boardService.revisePoint(point))
             return new ResponseEntity<>("Success up point", HttpStatus.OK);
         else
-            return new ResponseEntity<>("Fail up Point", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("Success up cancel point", HttpStatus.OK);
     }
 
     //게시글 싫어요
     @RequestMapping(value = "/{categoryId}/{boardId}/unlike", method = RequestMethod.POST)
-    @ApiOperation(value = "게시글 싫어요", notes = "게시글을 싫어요 합니다.")
-    public ResponseEntity<String> downPointBoard(@PathVariable("boardId") Long boardId){
-        if(boardService.revisePoint(-1, boardId))
+    @ApiOperation(value = "게시글 싫어요", notes = "게시글을 싫어요/싫어요취소 합니다.")
+    public ResponseEntity<String> downPointBoard(@RequestBody PointDTO point) throws Exception {
+        if(boardService.revisePoint(point))
             return new ResponseEntity<>("Success down point", HttpStatus.OK);
         else
-            return new ResponseEntity<>("Fail down Point", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("Success down cancel Point", HttpStatus.OK);
     }
-
-    @RequestMapping(value = {"/{categoryId}/{boardId}/like/cancel","/{categoryId}/{boardId}/unlike/cancel"}, method = RequestMethod.POST)
-    @ApiOperation(value = "좋/싫 취소", notes = "게시글을 좋/싫 취소합니다.")
-    public ResponseEntity<String> cancelPoint(@PathVariable("boardId") Long boardId) throws Exception {
-        if(boardService.cancelPoint(boardId))
-            return new ResponseEntity<>("Success cancel point", HttpStatus.OK);
-        else
-            return new ResponseEntity<>("Fail cancel Point", HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
-
-
 }
