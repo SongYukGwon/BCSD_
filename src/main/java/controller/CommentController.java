@@ -1,6 +1,7 @@
 package controller;
 
 import domain.CommentDTO;
+import domain.PointDTO;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -57,29 +58,20 @@ public class CommentController {
 
     @RequestMapping(value = "/{commentId}/like", method = RequestMethod.POST)
     @ApiOperation(value = "댓글 좋아요", notes = "댓글을 좋아요 합니다.")
-    public ResponseEntity<String> upPoint(@PathVariable("commentId")Long commentId) throws Exception {
-        if (commentService.revisePointComment(commentId, 1))
-            return new ResponseEntity<>("Success like Comment", HttpStatus.OK);
+    public ResponseEntity<String> upPoint(@RequestBody PointDTO point) throws Exception {
+        if (commentService.revisePointComment(point))
+            return new ResponseEntity<>("Success up point", HttpStatus.OK);
         else
-            return new ResponseEntity<>("Fail like Comment", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("Success cancel up point", HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{commentId}/unlike", method = RequestMethod.POST)
     @ApiOperation(value = "댓글 싫어요", notes = "댓글을 싫어요 합니다.")
-    public ResponseEntity<String> downPoint(@PathVariable("commentId")Long commentId) throws Exception {
-        if (commentService.revisePointComment(commentId, -1))
-            return new ResponseEntity<>("Success like Comment", HttpStatus.OK);
+    public ResponseEntity<String> downPoint(@RequestBody PointDTO point) throws Exception {
+        if (commentService.revisePointComment(point))
+            return new ResponseEntity<>("Success down point", HttpStatus.OK);
         else
-            return new ResponseEntity<>("Fail like Comment", HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
-    @RequestMapping(value = {"/{commentId}/like/cancel","/{commentId}/unlike/cancel"}, method = RequestMethod.POST)
-    @ApiOperation(value = "댓글 좋/싫 취소", notes = "댓글 좋/싫 취소합니다.")
-    public ResponseEntity<String> cancelCommentPoint(@PathVariable("commentId")Long commentId) throws Exception {
-        if(commentService.cancelCommentPoint(commentId))
-            return new ResponseEntity<>("Success cancel point", HttpStatus.OK);
-        else
-            return new ResponseEntity<>("Fail cancel Point", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("Success cancel down Point", HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{commentId}/reply", method = RequestMethod.POST)

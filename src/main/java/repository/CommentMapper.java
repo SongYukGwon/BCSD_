@@ -1,6 +1,7 @@
 package repository;
 
 import domain.CommentDTO;
+import domain.PointDTO;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -13,7 +14,7 @@ public interface CommentMapper {
     CommentDTO readComment(Long commentId);
     void deleteComment(Long commentId);
     void updateComment(CommentDTO comment) ;
-    void revisePointComment(@Param("point") int point, @Param("commentId") long commentId);
+    void revisePointComment(PointDTO point);
     List<CommentDTO> commentList(Long boardId);
     void replyComment(CommentDTO comment);
 }

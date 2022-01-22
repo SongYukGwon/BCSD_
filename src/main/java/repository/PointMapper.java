@@ -11,7 +11,7 @@ public interface PointMapper {
     void insertPointUsed(PointDTO pointDTO);
     void insertCommentPointUsed(PointDTO pointDTO);
     void cancelPoint(PointDTO pointDTO);
-    void cancelCommentPoint(@Param("user_id")Long userId, @Param("comment_id")Long commentId);
+    void cancelCommentPoint(PointDTO pointDTO);
     void rePoint(PointDTO pointDTO);
     void reCommentPoint(PointDTO pointDTO);
 }
