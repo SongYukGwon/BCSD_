@@ -159,6 +159,10 @@ public class BoardService implements IBoardService{
         //게시글 정보 불러오기
         BoardDTO board = boardMapper.readBoard(boardId);
 
+        //게시글 존재 여부 확인
+        if(board == null)
+            throw new Exception("Not Exist Board or User");
+
         //삭제된 게시물인지 확인
         if(board.getDeleted_at() == 1)
             throw new Exception("This post is deleted");

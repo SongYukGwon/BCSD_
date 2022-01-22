@@ -85,7 +85,7 @@ public class BoardController {
     }
 
     //게시물 검색
-    @RequestMapping(value = "/find", method = RequestMethod.POST)
+    @RequestMapping(value = "/find", method = RequestMethod.GET)
     @ApiOperation(value = "게시물 검색", notes = "게시글을 검색합니다")
     public ResponseEntity<List<BoardDTO>> findBoard(@RequestParam("page") int page, @RequestParam("keyword")String keyword, @RequestParam(value = "type", required = false) int type) throws Exception {
         return new ResponseEntity<>(boardService.findBoard(keyword, type, page*10-1), HttpStatus.OK);
@@ -101,7 +101,7 @@ public class BoardController {
         if(boardService.revisePoint(point))
             return new ResponseEntity<>("Success up point", HttpStatus.OK);
         else
-            return new ResponseEntity<>("Success up cancel point", HttpStatus.OK);
+            return new ResponseEntity<>("Success cancel up point", HttpStatus.OK);
     }
 
     //게시글 싫어요
@@ -111,6 +111,6 @@ public class BoardController {
         if(boardService.revisePoint(point))
             return new ResponseEntity<>("Success down point", HttpStatus.OK);
         else
-            return new ResponseEntity<>("Success down cancel Point", HttpStatus.OK);
+            return new ResponseEntity<>("Success cancel down Point", HttpStatus.OK);
     }
 }
