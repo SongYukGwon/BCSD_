@@ -112,10 +112,18 @@ public class BoardService implements IBoardService{
         else {
             //좋/싫 기록이 있지만 취소했던 경우
             //좋/싫 기록이 있지만 이전과는 반대된 point를 입력하는 경우
-            if (pointDTO.getIs_deleted() == 1 || pointDTO.getPoint() != point.getPoint()) {
-                boardMapper.revisePoint(point);
+            if (pointDTO.getIs_deleted() == 1) {
+                //기존의 point db 수정
                 pointMapper.rePoint(point);
+                boardMapper.revisePoint(point);
                 return true;
+            }
+            else if(pointDTO.getPoint() != point.getPoint()){
+                //기존의 point db 수정
+                pointMapper.rePoint(point);
+                //싫어요 했다가 좋아요를 누르면 -1되었던것에서 +1이 되어야한다.
+                point.setPoint(point.getPoint()*2);
+                boardMapper.revisePoint(point);
             }
             //좋/싫 기록이 있고 같은 똑같은 입력을 했을 경우 취소
             else{
