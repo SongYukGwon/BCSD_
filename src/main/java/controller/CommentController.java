@@ -57,7 +57,7 @@ public class CommentController {
     }
 
     @RequestMapping(value = "/{commentId}/like", method = RequestMethod.POST)
-    @ApiOperation(value = "댓글 좋아요", notes = "댓글을 좋아요 합니다.")
+    @ApiOperation(value = "댓글 좋아요/취소", notes = "댓글을 좋아요/취소 합니다.")
     public ResponseEntity<String> upPoint(@RequestBody PointDTO point) throws Exception {
         if (commentService.revisePointComment(point))
             return new ResponseEntity<>("Success up point", HttpStatus.OK);
@@ -66,7 +66,7 @@ public class CommentController {
     }
 
     @RequestMapping(value = "/{commentId}/unlike", method = RequestMethod.POST)
-    @ApiOperation(value = "댓글 싫어요", notes = "댓글을 싫어요 합니다.")
+    @ApiOperation(value = "댓글 싫어요/취소", notes = "댓글을 싫어요/취소 합니다.")
     public ResponseEntity<String> downPoint(@RequestBody PointDTO point) throws Exception {
         if (commentService.revisePointComment(point))
             return new ResponseEntity<>("Success down point", HttpStatus.OK);
