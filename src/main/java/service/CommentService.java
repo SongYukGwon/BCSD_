@@ -114,6 +114,7 @@ public class CommentService implements ICommentService {
                 pointMapper.reCommentPoint(point);
                 point.setPoint(point.getPoint() * 2);
                 commentMapper.revisePointComment(point);
+                return true;
             }
             else{
                 //좋/싫 기록이 있고 같은 똑같은 입력을 했을 경우 취소
@@ -124,7 +125,6 @@ public class CommentService implements ICommentService {
                 return false;
             }
         }
-        throw new Exception("None Exist Error");
     }
 
     @Override

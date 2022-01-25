@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import service.BoardService;
 import service.CategoryService;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Controller
@@ -69,8 +70,8 @@ public class BoardController {
     //게시글 읽기
     @RequestMapping(value = "/{categoryId}/{boardId}", method = RequestMethod.GET)
     @ApiOperation(value = " 게시글 읽기", notes = "게시글을 읽어옵니다")
-    public ResponseEntity<BoardDTO> readBoard(@PathVariable("boardId") Long boardId) throws Exception {
-        BoardDTO board = boardService.readBoard(boardId);
+    public ResponseEntity<BoardDTO> readBoard(@PathVariable("boardId") Long boardId, HttpServletResponse response) throws Exception {
+        BoardDTO board = boardService.readBoard(boardId, response);
         return new ResponseEntity<>(board, HttpStatus.OK);
     }
 

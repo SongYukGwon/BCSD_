@@ -10,7 +10,9 @@ import repository.BoardMapper;
 import repository.PointMapper;
 import service.interfaces.IBoardService;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Service
@@ -21,6 +23,49 @@ public class BoardService implements IBoardService{
     @Autowired
     PointMapper pointMapper;
 
+
+    public boolean CheckPreviousView(HttpServletRequest request, HttpServletResponse response ,Long boardId){
+        Cookie[] cookies = request.getCookies();
+        //쿠키가 있는지 없는지 확인하기 위한 변수
+        int check = 0;
+
+        for(Cookie cookie : cookies){
+            if(cookie.getName().equals("view")){
+                check = 1;
+                //쿠키에 방문 했는지 안했는지 확인하기 위한 변수
+                int view = 0;
+                // _를 기준으로 나눔
+                String[] viewList = cookie.getValue().split("_");
+                for(String tmp : viewList){
+                    //일치하는것이 있다면 view = 1
+                    if(tmp.equals(boardId.toString())) {
+                        view = 1;
+                        break;
+                    }
+                }
+                //view가 1이면 이미 본것
+                if(view == 1){
+                    return false;
+                }else{
+                    //view가 0이면 안본것이므로 cookie 업데이트
+                    cookie.setValue(cookie.getValue()+"_"+boardId.toString());
+                    response.addCookie(cookie);
+                    return true;
+                }
+            }
+        }
+        //쿠키가 없을때
+        if(check == 0){
+            Cookie cookie1 = new Cookie("view", boardId.toString());
+            cookie1.setMaxAge(60*60); //한시간 설정
+            response.addCookie(cookie1);
+
+            return true;
+        }
+        //예외치 못한 에러
+        System.out.println("error");
+        return true;
+    }
 
     public Long CheckUserId(){
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
@@ -134,6 +179,7 @@ public class BoardService implements IBoardService{
                 return false;
             }
         }
+        throw new Exception("None Exist Erro");
     }
 
     @Override
@@ -162,7 +208,7 @@ public class BoardService implements IBoardService{
     }
 
     @Override
-    public BoardDTO readBoard(long boardId) throws Exception{
+    public BoardDTO readBoard(long boardId, HttpServletResponse response) throws Exception{
 
         //게시글 정보 불러오기
         BoardDTO board = boardMapper.readBoard(boardId);
@@ -176,11 +222,15 @@ public class BoardService implements IBoardService{
             throw new Exception("This post is deleted");
 
         //게시글 조회수 증가
-        boardMapper.addView(boardId);
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+
+        if(CheckPreviousView(request, response, boardId))
+            boardMapper.addView(boardId);
 
         return board;
     }
 
+    @Override
     public List<BoardDTO> boardList(int page){
         //페이지
         if(page < 1){
