@@ -1,6 +1,8 @@
 package service.interfaces;
 
 import domain.BoardDTO;
+import domain.FindPagenation;
+import domain.Page;
 import domain.PointDTO;
 
 import javax.servlet.http.HttpServletResponse;
@@ -11,8 +13,7 @@ public interface IBoardService {
     boolean deleteBoard(long boardId) throws Exception;
     boolean updateBoard(BoardDTO board, long boardID) throws Exception;
     boolean revisePoint(PointDTO point) throws Exception;
-    List<BoardDTO> findBoard(String title, int type, int page) throws Exception;
+    List<BoardDTO> findBoard(FindPagenation page) throws Exception;
     BoardDTO readBoard(long boardId, HttpServletResponse response) throws Exception;
-    List<BoardDTO> boardList(int page);
-
+    List<BoardDTO> boardList(Page page);
 }

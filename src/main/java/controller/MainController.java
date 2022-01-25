@@ -17,12 +17,6 @@ public class MainController {
     @Autowired
     private UserService userService;
 
-    //회원가입 프런트
-    @RequestMapping(value="/abc", method = RequestMethod.GET)
-    public String signUpPage(){
-        return "signUp";
-    }
-
     @RequestMapping(value = "/profile", method = RequestMethod.GET)
     @ApiOperation(value = "프로필", notes="프로필 창을 위한 api입니다.")
     public ResponseEntity<UserDTO> profile() throws Exception {

@@ -6,7 +6,7 @@
         ON board.user_id = user.id
         WHERE board.is_deleted = 0 AND user.is_deleted = 0
         ORDER BY board.created_at DESC
-        LIMIT #{page}, 15
+        LIMIT #{start}, #{Page.range}
     </select>
     <select id="readBoard" resultType="domain.BoardDTO">
         SELECT title, content, view, point, name, board.created_at, board.updated_at  FROM board JOIN user
@@ -16,23 +16,23 @@
     <select id="findBoardInTitle" resultType="domain.BoardDTO">
         SELECT title, content, view, point, name FROM board JOIN user
         ON board.user_id = user.id
-        WHERE title LIKE CONCAT('%', #{sen}, '%') AND board.is_deleted = 0 AND user.is_deleted = 0
+        WHERE title LIKE CONCAT('%', #{Page.keyword}, '%') AND board.is_deleted = 0 AND user.is_deleted = 0
         ORDER BY board.created_at DESC
-        LIMIT #{page}, 15
+        LIMIT #{start}, #{Page.range}
     </select>
     <select id="findBoardInContent" resultType="domain.BoardDTO">
         SELECT title, content, view, point, name FROM board JOIN user
         ON board.user_id = user.id
-        WHERE content LIKE CONCAT('%', #{sen}, '%') AND board.is_deleted = 0 AND user.is_deleted = 0
+        WHERE content LIKE CONCAT('%', #{Page.keyword}, '%') AND board.is_deleted = 0 AND user.is_deleted = 0
         ORDER BY board.created_at DESC
-        LIMIT #{page}, 15
+        LIMIT #{start}, #{Page.range}
     </select>
     <select id="findBoardInUser" resultType="domain.BoardDTO">
         SELECT title, content, point, view, name FROM board JOIN user
         ON board.user_id = user.id
-        WHERE (name LIKE CONCAT('%', #{sen}, '%')) AND user.is_deleted = 0 AND board.is_deleted = 0
+        WHERE (name LIKE CONCAT('%', #{Page.keyword}, '%')) AND user.is_deleted = 0 AND board.is_deleted = 0
         ORDER BY board.created_at DESC
-        LIMIT #{page}, 15
+        LIMIT #{start}, #{Page.range}
     </select>
     <insert id="makeBoard">
         INSERT INTO board (title, user_id, content, category_id) VALUES (#{title}, #{user_Id},#{content}, #{category_id})

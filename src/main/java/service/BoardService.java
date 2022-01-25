@@ -1,6 +1,8 @@
 package service;
 
 import domain.BoardDTO;
+import domain.FindPagenation;
+import domain.Page;
 import domain.PointDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -183,24 +185,20 @@ public class BoardService implements IBoardService{
     }
 
     @Override
-    public List<BoardDTO> findBoard(String sen, int type, int page) throws Exception {
+    public List<BoardDTO> findBoard(FindPagenation page) throws Exception {
 
-        //페이지
-        if(page < 1){
-            page = 0;
-        }else
-            page = page*10;
+        int start = (page.getPage()-1)*page.getRange();
 
         //해당 제목을 가진 게시물 검색
-        if(type==1){
-            List<BoardDTO> boards = boardMapper.findBoardInTitle(sen,page);
+        if(page.getType()==1){
+            List<BoardDTO> boards = boardMapper.findBoardInTitle(page,start);
             return boards;
         }
-        else if(type == 2) {
-            List<BoardDTO> boards = boardMapper.findBoardInContent(sen,page);
+        else if(page.getType() == 2) {
+            List<BoardDTO> boards = boardMapper.findBoardInContent(page,start);
             return boards;
-        }else if(type == 3){
-            List<BoardDTO> boards = boardMapper.findBoardInUser(sen,page);
+        }else if(page.getType() == 3){
+            List<BoardDTO> boards = boardMapper.findBoardInUser(page,start);
             return boards;
         }else{
             throw new Exception("not match type");
@@ -231,13 +229,9 @@ public class BoardService implements IBoardService{
     }
 
     @Override
-    public List<BoardDTO> boardList(int page){
+    public List<BoardDTO> boardList(Page page){
         //페이지
-        if(page < 1){
-            page = 0;
-        }else
-            page = page*10;
-
-        return boardMapper.boardList(page);
+        int start = (page.getPage()-1)*page.getRange();
+        return boardMapper.boardList(page,start);
     }
 }
