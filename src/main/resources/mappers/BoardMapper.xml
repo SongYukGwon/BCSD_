@@ -9,7 +9,7 @@
         LIMIT #{start}, #{Page.range}
     </select>
     <select id="readBoard" resultType="domain.BoardDTO">
-        SELECT title, content, view, point, name, board.created_at, board.updated_at  FROM board JOIN user
+        SELECT title, content, view, point, name, board.created_at, board.updated_at, board.user_id  FROM board JOIN user
         ON board.user_id = user.id
         WHERE user.is_deleted = 0 AND board.id = #{boardId}
     </select>

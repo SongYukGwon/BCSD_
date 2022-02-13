@@ -94,12 +94,14 @@ public class BoardService implements IBoardService{
 
         //현재로그인하고있는 사용자의 정보를 받아오기
         Long userId = CheckUserId();
+        System.out.println(userId);
+        System.out.println(board.getUser_Id());
         if(userId == null)
             throw new Exception("Have to Login");
 
         //사용자의 정보와 board의 정보를 비교
         if(board.getUser_Id() != userId)
-            throw new Exception("Have to Login");
+            throw new Exception("not match");
 
         //일치한다면 게시글 삭제
         boardMapper.deleteBoard(boardId);
@@ -133,11 +135,8 @@ public class BoardService implements IBoardService{
     public boolean revisePoint(PointDTO point) throws Exception {
         //사용자 확인
         Long userId = CheckUserId();
-
         if(userId == null)
             throw new Exception("not login");
-        else if(point.getUser_id() != userId)
-            throw new Exception("not match user");
 
         //point 이상 유무 확인
         if(point.getPoint() != 1 && point.getPoint()!=-1)
@@ -149,6 +148,8 @@ public class BoardService implements IBoardService{
 
         //사용자가 이전에 해당게시물에 포인트를 사용하였는지 확인
         PointDTO pointDTO = pointMapper.readUsePoint(userId, point.getBoard_id());
+
+        point.setUser_id(userId);
 
         if(pointDTO == null) {
             //이전에 좋/싫 기록이 없다면
@@ -181,7 +182,7 @@ public class BoardService implements IBoardService{
                 return false;
             }
         }
-        throw new Exception("None Exist Erro");
+        throw new Exception("None Exist Error");
     }
 
     @Override

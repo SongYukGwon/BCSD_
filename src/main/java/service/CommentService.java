@@ -67,9 +67,6 @@ public class CommentService implements ICommentService {
         Long userId = CheckUserId();
         if(userId == null)
             throw new Exception("not login");
-        //사용자 일치 여부 확인
-        else if(point.getUser_id() != userId)
-            throw new Exception("not match user");
 
         //point 이상 유무 확인
         if(point.getPoint() != 1 && point.getPoint()!=-1)
@@ -93,6 +90,8 @@ public class CommentService implements ICommentService {
 
         //사용자가 이전에 추천했는지 확인 필요
         PointDTO pointDTO = pointMapper.readUseCommentPoint(userId, point.getCommentId());
+
+        point.setUser_id(userId);
 
         if(pointDTO == null) {
             //이전에 좋/싫 기록이 없다면 댓글 포인트 증가 및 point db 생성
